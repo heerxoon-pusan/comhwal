@@ -39,6 +39,7 @@
 }
 </script>
 
+<script>(function(d){if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window){d.documentElement.classList.add('anim')}})(document)</script>
 <style>
 :root{
   --navy:#0b1f3f;
@@ -146,8 +147,8 @@ table.profile{width:100%;border-collapse:collapse;border-top:2px solid var(--nav
 details{border-bottom:1px solid var(--line)}
 summary{cursor:pointer;padding:20px 4px;font-weight:700;color:var(--ink);list-style:none;display:flex;justify-content:space-between;gap:16px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--blue);font-weight:600}
-details[open] summary::after{content:"−"}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--blue);font-weight:600;transition:transform .3s}
+details[open] summary::after{transform:rotate(45deg)}
 details > div{padding:0 4px 22px;color:var(--muted);max-width:44em}
 
 /* 상담·오시는 길 */
@@ -177,13 +178,146 @@ footer{background:#07152b;color:#93a1bf;padding:30px 0 calc(30px + env(safe-area
 footer strong{color:#fff}
 .to-top{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:42px;height:42px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;text-decoration:none;font-weight:700;box-shadow:0 3px 12px rgba(11,31,63,.3)}
 
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* ===== 스크롤·등장 애니메이션 ===== */
+main{overflow-x:clip}
+.progress{position:absolute;left:0;bottom:-1px;height:3px;width:100%;background:var(--blue);transform:scaleX(0);transform-origin:left;pointer-events:none}
+.site-header{transition:box-shadow .3s}
+.site-header .wrap{transition:min-height .3s}
+.site-header.scrolled{box-shadow:0 6px 22px rgba(11,31,63,.08)}
+.site-header.scrolled .wrap{min-height:56px}
+
+.gnb a{position:relative;transition:color .25s,background .25s}
+.gnb a::after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.gnb a.active{color:var(--navy)}
+.gnb a.active::after,.gnb a:hover::after{transform:scaleX(1)}
+
+.btn,.call{transition:background .25s,border-color .25s,transform .25s,box-shadow .25s}
+.btn:hover,.call:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(11,31,63,.2)}
+.btn:active,.call:active{transform:none;box-shadow:none}
+.maps a{transition:background .25s,transform .25s}
+.maps a:hover{transform:translateY(-2px)}
+input,select,textarea{transition:border-color .25s,box-shadow .25s}
+form button{transition:background .25s,transform .25s}
+form button:hover{transform:translateY(-2px)}
+summary{transition:color .25s}
+summary:hover{color:var(--blue)}
+.to-top:hover{background:#13315f}
+
+/* 히어로 */
+.hero{position:relative}
+.mask{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.mask>span{display:block}
+.hero h1{margin-bottom:20px}
+.cue{position:absolute;left:max(20px,calc((100% - 1080px)/2));bottom:20px;width:1px;height:44px;background:var(--line);overflow:hidden;transition:opacity .4s}
+.cue span{position:absolute;left:0;top:-16px;width:1px;height:16px;background:var(--navy);animation:cue 1.8s ease-in-out infinite}
+body.scrolled .cue{opacity:0}
+@media(max-width:800px){.cue{display:none}}
+@keyframes cue{to{top:44px}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes fadeFromRight{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
+@keyframes maskUp{from{transform:translateY(105%)}to{transform:none}}
+@keyframes drawX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes faqIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.anim .mask>span{transform:translateY(105%);animation:maskUp 1s cubic-bezier(.2,.7,.2,1) .1s forwards}
+.anim .hero .firm{opacity:0;animation:fadeUp .8s ease .55s forwards}
+.anim .hero .rule{transform:scaleX(0);transform-origin:left;animation:drawX .8s cubic-bezier(.2,.7,.2,1) .75s forwards}
+.anim .hero .lead{opacity:0;animation:fadeUp .8s ease .9s forwards}
+.anim .hero .btns{opacity:0;animation:fadeUp .8s ease 1.05s forwards}
+.anim .hero .card{opacity:0;animation:fadeFromRight 1s cubic-bezier(.2,.7,.2,1) .45s forwards}
+.anim .card .row{opacity:0;animation:fadeUp .6s ease forwards;animation-delay:calc(.95s + var(--i,0) * .1s)}
+.card .row:nth-child(1){--i:0}
+.card .row:nth-child(2){--i:1}
+.card .row:nth-child(3){--i:2}
+.card .row:nth-child(4){--i:3}
+
+/* 스크롤 등장 (위에서 아래로 / 좌우에서 / 확대) */
+.anim .rv{--x:0px;--y:28px;--s:1;opacity:0;transform:translate(var(--x),var(--y)) scale(var(--s));transition:opacity .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms),transform .8s cubic-bezier(.2,.7,.2,1) var(--d,0ms)}
+.anim .rv-l{--x:-36px;--y:0px}
+.anim .rv-r{--x:36px;--y:0px}
+.anim .rv-pop{--s:.94;--y:14px}
+.anim .rv.in{--x:0px;--y:0px;--s:1;opacity:1}
+.anim .sec-lead.rv{--d:90ms}
+@media(max-width:760px){.anim .rv-l{--x:-20px}.anim .rv-r{--x:20px}}
+
+/* 제목 아래 선이 그려지는 효과 */
+h2.sec::after{content:"";display:block;width:44px;height:3px;background:var(--blue);margin-top:14px}
+.consult h2.sec::after{background:#fff}
+.anim h2.sec::after{transform:scaleX(0);transform-origin:left;transition:transform .8s cubic-bezier(.2,.7,.2,1) .35s}
+.anim h2.sec.in::after{transform:scaleX(1)}
+
+/* 업무 분야: 마우스를 올리면 밑줄이 그려짐 */
+.service{position:relative}
+.service::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.service h3{transition:color .3s,transform .3s}
+.service:hover::after{transform:scaleX(1)}
+.service:hover h3{color:var(--blue);transform:translateX(6px)}
+
+/* 진행 방식: 원이 튀어나오고 선이 이어짐 */
+.anim .steps li::before{transform:scale(0);transition:transform .55s cubic-bezier(.3,1.6,.5,1) calc(var(--d,0ms) + 120ms),background .3s,color .3s}
+.anim .steps li.in::before{transform:scale(1)}
+.anim .steps li::after{transform:scaleX(0);transform-origin:left;transition:transform .8s ease calc(var(--d,0ms) + 450ms)}
+.anim .steps li.in::after{transform:scaleX(1)}
+@media(max-width:760px){
+  .anim .steps li::after{transform:scaleY(0);transform-origin:top}
+  .anim .steps li.in::after{transform:scaleY(1)}
+}
+
+/* FAQ 열림, 맨 위로 버튼 */
+.anim details[open] > div{animation:faqIn .4s ease}
+.anim .to-top{opacity:0;pointer-events:none;transform:translateY(12px);transition:opacity .3s,transform .3s,background .25s}
+.anim .to-top.show{opacity:1;pointer-events:auto;transform:none}
+
+/* ===== 업무 분야: 카드 + 탭 전환 ===== */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.svc-card{width:100%;height:100%;font:inherit;text-align:left;cursor:pointer;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:6px;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s,background .3s}
+.svc-card .ic{width:42px;height:42px;border-radius:50%;background:#e8eefa;color:var(--blue);display:grid;place-items:center;margin-bottom:8px;transition:background .3s,color .3s,transform .45s cubic-bezier(.3,1.6,.5,1)}
+.svc-card svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.svc-card b{font-size:1.05rem;color:var(--navy);letter-spacing:-.01em;transition:color .3s}
+.svc-card small{color:var(--muted);font-size:.9rem;line-height:1.55;transition:color .3s}
+.svc-card:hover{transform:translateY(-5px);border-color:var(--blue);box-shadow:0 14px 28px rgba(11,31,63,.12)}
+.svc-card:hover .ic{transform:scale(1.1) rotate(-6deg)}
+.svc-card:active{transform:translateY(-2px) scale(.99)}
+.svc-card[aria-selected="true"]{background:var(--navy);border-color:var(--navy);box-shadow:0 14px 28px rgba(11,31,63,.22)}
+.svc-card[aria-selected="true"] b{color:#fff}
+.svc-card[aria-selected="true"] small{color:#c4d0ea}
+.svc-card[aria-selected="true"] .ic{background:rgba(255,255,255,.14);color:#fff}
+
+.svc-panel{background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:4px;padding:30px 32px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:36px;margin-bottom:16px}
+.svc-panel h3{font-family:var(--serif);font-size:1.5rem;letter-spacing:-.02em;margin:0 0 10px;color:var(--navy)}
+.svc-panel .intro p{color:var(--muted);margin:0 0 22px}
+.svc-panel h4{margin:0 0 10px;font-size:1rem;color:var(--navy);padding-bottom:8px;border-bottom:2px solid var(--blue)}
+.svc-panel ul{margin:0;padding-left:1.1em}
+.svc-panel li{margin:7px 0}
+/* 탭 동작이 켜지면 패널을 한 자리에 겹쳐 두고 부드럽게 교체 (높이가 흔들리지 않음) */
+.svc.tabs-on .svc-stage{display:grid}
+.svc.tabs-on .svc-panel{grid-area:1/1;margin:0;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .25s ease,transform .3s ease,visibility 0s linear .3s}
+.svc.tabs-on .svc-panel.active{opacity:1;visibility:visible;transform:none;transition:opacity .4s ease .12s,transform .45s cubic-bezier(.2,.7,.2,1) .12s,visibility 0s}
+.svc.tabs-on .svc-panel .col{opacity:0;transform:translateY(16px);transition:opacity .2s ease,transform .2s ease}
+.svc.tabs-on .svc-panel.active .col{opacity:1;transform:none;transition:opacity .5s ease calc(.22s + var(--i,0) * .09s),transform .55s cubic-bezier(.2,.7,.2,1) calc(.22s + var(--i,0) * .09s)}
+.steps li:hover::before{background:var(--navy);color:#fff}
+@media(max-width:900px){
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .svc-panel{grid-template-columns:1fr 1fr;gap:28px}
+  .svc-panel .intro{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .svc-grid{gap:10px}
+  .svc-card{padding:16px 14px}
+  .svc-card small{display:none}
+  .svc-panel{grid-template-columns:1fr;padding:24px 20px;gap:22px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">본문 바로가기</a>
 
 <header class="site-header">
+  <div class="progress" id="progress" aria-hidden="true"></div>
   <div class="wrap">
     <a class="brand" href="#top" aria-label="처음으로"><b>세무사 최희정</b><span>세무법인 택스테크</span></a>
     <nav class="gnb" aria-label="주요 메뉴">
@@ -201,7 +335,7 @@ footer strong{color:#fff}
 <div class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <h1>세무사 최희정</h1>
+      <h1><span class="mask"><span>세무사 최희정</span></span></h1>
       <p class="firm">세무법인 택스테크</p>
       <div class="rule" aria-hidden="true"></div>
       <p class="lead">울산 남구에서 개인사업자와 법인의 기장·세무조정, 각종 세금 신고와 세무 상담을 도와드립니다.</p>
@@ -222,21 +356,56 @@ footer strong{color:#fff}
       </dl>
     </aside>
   </div>
+  <a class="cue" href="#services" aria-label="아래로 스크롤"><span></span></a>
 </div>
 
 <!-- 업무 분야 -->
 <section id="services" class="soft">
   <div class="wrap">
-    <h2 class="sec">업무 분야</h2>
-    <p class="sec-lead">개인사업자부터 법인까지, 필요한 세무 업무를 한곳에서 상담받으실 수 있습니다.</p>
-    <!-- [수정] 실제 취급 업무에 맞게 항목을 추가·삭제하세요 -->
-    <div class="services">
-      <div class="service"><h3>기장·세무조정</h3><p>장부 작성과 결산, 세무조정을 정기적으로 관리해 드립니다.</p></div>
-      <div class="service"><h3>부가가치세·종합소득세 신고</h3><p>신고 기한에 맞춰 자료를 정리하고 신고를 대리합니다.</p></div>
-      <div class="service"><h3>법인세 신고</h3><p>법인의 결산과 법인세 신고, 절세 방안을 함께 검토합니다.</p></div>
-      <div class="service"><h3>양도·상속·증여 세무</h3><p>부동산·재산 이전에 따른 세금을 미리 계산하고 안내합니다.</p></div>
-      <div class="service"><h3>창업·법인 설립 상담</h3><p>사업 형태 선택과 사업자등록, 초기 세무 세팅을 도와드립니다.</p></div>
-      <div class="service"><h3>세무조사·불복 대응</h3><p>세무 조사 통지와 고지서를 받았을 때 대응 방향을 안내합니다.</p></div>
+    <h2 class="sec rv">업무 분야</h2>
+    <p class="sec-lead rv">분야를 선택하면 상담 사례와 준비하면 좋은 자료를 볼 수 있습니다.</p>
+    <!-- [수정] 분야 카드와 상세 내용은 실제 취급 업무에 맞게 바꾸세요 -->
+    <div class="svc" id="svc">
+      <div class="svc-grid" role="tablist" aria-label="업무 분야 선택" data-stagger="3">
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-1" aria-controls="sp-1" aria-selected="true"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3V4z"/><path d="M8 8h7M8 12h7"/></svg></span><b>기장·세무조정</b><small>장부 작성과 결산, 세무조정을 정기적으로 관리해 드립니다.</small></button></div>
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-2" aria-controls="sp-2" aria-selected="false" tabindex="-1"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 14l2 2 3.5-4"/></svg></span><b>부가가치세·종합소득세 신고</b><small>신고 기한에 맞춰 자료를 정리하고 신고를 대리합니다.</small></button></div>
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-3" aria-controls="sp-3" aria-selected="false" tabindex="-1"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5l8-2v18"/><path d="M12 9h8v12"/><path d="M7 9h2M7 13h2M7 17h2M15 13h2M15 17h2"/></svg></span><b>법인세 신고</b><small>법인의 결산과 법인세 신고, 절세 방안을 함께 검토합니다.</small></button></div>
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-4" aria-controls="sp-4" aria-selected="false" tabindex="-1"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span><b>양도·상속·증여 세무</b><small>부동산·재산 이전에 따른 세금을 미리 계산하고 안내합니다.</small></button></div>
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-5" aria-controls="sp-5" aria-selected="false" tabindex="-1"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-9"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z"/><path d="M12 14c0-3 2.5-5 6-5 0 3-2.5 5-6 5z"/></svg></span><b>창업·법인 설립 상담</b><small>사업 형태 선택과 사업자등록, 초기 세무 세팅을 도와드립니다.</small></button></div>
+        <div class="svc-item rv rv-pop" role="presentation"><button type="button" role="tab" class="svc-card" id="sv-6" aria-controls="sp-6" aria-selected="false" tabindex="-1"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>세무조사·불복 대응</b><small>세무 조사 통지와 고지서를 받았을 때 대응 방향을 안내합니다.</small></button></div>
+      </div>
+      <div class="svc-stage">
+        <div class="svc-panel" role="tabpanel" id="sp-1" aria-labelledby="sv-1">
+          <div class="col intro" style="--i:0"><h3>기장·세무조정</h3><p>장부 작성부터 결산, 세무조정까지 정기적으로 관리해 세금 신고에 대비합니다.</p><a class="btn" href="#consult" data-type="기장·세무조정">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>사업을 시작했는데 장부를 직접 쓰기 어려울 때</li><li>매달 증빙을 정리하는 일이 부담될 때</li><li>세무 업무를 맡길 담당자를 정하고 싶을 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>사업자등록증</li><li>매출·매입 증빙 (세금계산서, 영수증 등)</li><li>통장·카드 사용 내역</li></ul></div>
+        </div>
+        <div class="svc-panel" role="tabpanel" id="sp-2" aria-labelledby="sv-2">
+          <div class="col intro" style="--i:0"><h3>부가가치세·종합소득세 신고</h3><p>신고 기한에 맞춰 자료를 정리하고 신고를 대리합니다.</p><a class="btn" href="#consult" data-type="부가가치세·종합소득세 신고">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>처음 신고라 절차가 막막할 때</li><li>소득이 여러 곳에서 발생해 정리가 어려울 때</li><li>신고 기한이 얼마 남지 않았을 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>사업자등록증</li><li>매출·매입 자료</li><li>소득·공제 관련 증빙</li></ul></div>
+        </div>
+        <div class="svc-panel" role="tabpanel" id="sp-3" aria-labelledby="sv-3">
+          <div class="col intro" style="--i:0"><h3>법인세 신고</h3><p>법인의 결산과 법인세 신고를 진행하고, 절세 방안을 함께 검토합니다.</p><a class="btn" href="#consult" data-type="법인세 신고">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>법인 결산이 처음일 때</li><li>대표자 급여와 비용 처리 기준이 궁금할 때</li><li>개인사업자의 법인 전환을 고민할 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>법인 설립 관련 서류</li><li>재무제표·결산 자료</li><li>통장 내역과 증빙</li></ul></div>
+        </div>
+        <div class="svc-panel" role="tabpanel" id="sp-4" aria-labelledby="sv-4">
+          <div class="col intro" style="--i:0"><h3>양도·상속·증여 세무</h3><p>부동산과 재산을 이전할 때 발생하는 세금을 미리 계산하고 안내합니다.</p><a class="btn" href="#consult" data-type="양도·상속·증여">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>부동산을 팔거나 물려주기 전에 세금이 궁금할 때</li><li>가족 간 재산 이전을 계획하고 있을 때</li><li>세금 규모를 미리 알고 준비하고 싶을 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>계약서와 등기 관련 자료</li><li>취득 당시 비용 증빙</li><li>가족 관계와 재산 목록</li></ul></div>
+        </div>
+        <div class="svc-panel" role="tabpanel" id="sp-5" aria-labelledby="sv-5">
+          <div class="col intro" style="--i:0"><h3>창업·법인 설립 상담</h3><p>사업 형태 선택과 사업자등록, 초기 세무 세팅을 도와드립니다.</p><a class="btn" href="#consult" data-type="창업·법인 설립">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>개인사업자와 법인 중 어느 쪽이 맞는지 고민될 때</li><li>사업자등록이 처음일 때</li><li>초기 비용을 어떻게 처리할지 궁금할 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>사업 계획과 업종 정보</li><li>임대차계약서</li><li>예상 매출·비용 자료</li></ul></div>
+        </div>
+        <div class="svc-panel" role="tabpanel" id="sp-6" aria-labelledby="sv-6">
+          <div class="col intro" style="--i:0"><h3>세무조사·불복 대응</h3><p>세무서에서 통지나 고지서를 받았을 때 대응 방향을 안내합니다.</p><a class="btn" href="#consult" data-type="세무조사·불복">이 분야로 상담 신청</a></div>
+          <div class="col" style="--i:1"><h4>이런 경우 상담하세요</h4><ul><li>세무서에서 안내문이나 통지를 받았을 때</li><li>고지된 세금에 이의가 있을 때</li><li>앞으로의 대응 절차를 알고 싶을 때</li></ul></div>
+          <div class="col" style="--i:2"><h4>준비하면 좋은 자료</h4><ul><li>받으신 통지서·고지서 원본</li><li>관련 신고 내역</li><li>해당 기간의 증빙 자료</li></ul></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -244,13 +413,13 @@ footer strong{color:#fff}
 <!-- 진행 방식 -->
 <section id="process">
   <div class="wrap">
-    <h2 class="sec">진행 방식</h2>
-    <p class="sec-lead">처음 방문하셔도 어렵지 않도록 단계별로 안내해 드립니다.</p>
-    <ol class="steps">
-      <li><h3>상담 신청</h3><p>전화, 이메일, 상담 신청서로 문의해 주세요.</p></li>
-      <li><h3>자료 확인</h3><p>필요한 서류와 현재 상황을 함께 확인합니다.</p></li>
-      <li><h3>신고·처리</h3><p>기한에 맞춰 신고와 필요한 절차를 진행합니다.</p></li>
-      <li><h3>사후 안내</h3><p>결과를 설명드리고 다음 신고 일정을 안내합니다.</p></li>
+    <h2 class="sec rv">진행 방식</h2>
+    <p class="sec-lead rv">처음 방문하셔도 어렵지 않도록 단계별로 안내해 드립니다.</p>
+    <ol class="steps" data-stagger="4">
+      <li class="rv"><h3>상담 신청</h3><p>전화, 이메일, 상담 신청서로 문의해 주세요.</p></li>
+      <li class="rv"><h3>자료 확인</h3><p>필요한 서류와 현재 상황을 함께 확인합니다.</p></li>
+      <li class="rv"><h3>신고·처리</h3><p>기한에 맞춰 신고와 필요한 절차를 진행합니다.</p></li>
+      <li class="rv"><h3>사후 안내</h3><p>결과를 설명드리고 다음 신고 일정을 안내합니다.</p></li>
     </ol>
   </div>
 </section>
@@ -259,19 +428,19 @@ footer strong{color:#fff}
 <section id="about" class="soft">
   <div class="wrap about">
     <div>
-      <h2 class="sec">세무사 소개</h2>
-      <p class="sec-lead" style="margin-bottom:28px">고객의 상황을 먼저 듣고, 필요한 신고와 절차를 알기 쉽게 설명드립니다.</p>
+      <h2 class="sec rv">세무사 소개</h2>
+      <p class="sec-lead rv" style="margin-bottom:28px">고객의 상황을 먼저 듣고, 필요한 신고와 절차를 알기 쉽게 설명드립니다.</p>
       <!-- [수정] 학력·경력 등 약력은 아래 표에 <tr><th>구분</th><td>내용</td></tr> 형식으로 추가하세요 -->
-      <table class="profile">
+      <table class="profile rv rv-l">
         <tr><th scope="row">성명</th><td>최희정</td></tr>
         <tr><th scope="row">자격</th><td>세무사</td></tr>
         <tr><th scope="row">소속</th><td>세무법인 택스테크</td></tr>
       </table>
     </div>
     <ul class="principles">
-      <li><b>정확한 신고</b><span>자료를 꼼꼼히 확인해 누락과 오류를 줄입니다.</span></li>
-      <li><b>쉬운 설명</b><span>어려운 세무 용어 대신 이해하기 쉬운 말로 안내합니다.</span></li>
-      <li><b>미리 챙기는 일정</b><span>신고 기한과 준비 서류를 사전에 알려 드립니다.</span></li>
+      <li class="rv rv-r"><b>정확한 신고</b><span>자료를 꼼꼼히 확인해 누락과 오류를 줄입니다.</span></li>
+      <li class="rv rv-r"><b>쉬운 설명</b><span>어려운 세무 용어 대신 이해하기 쉬운 말로 안내합니다.</span></li>
+      <li class="rv rv-r"><b>미리 챙기는 일정</b><span>신고 기한과 준비 서류를 사전에 알려 드립니다.</span></li>
     </ul>
   </div>
 </section>
@@ -279,22 +448,22 @@ footer strong{color:#fff}
 <!-- FAQ -->
 <section id="faq">
   <div class="wrap">
-    <h2 class="sec">자주 묻는 질문</h2>
-    <p class="sec-lead">상담 전에 자주 문의하시는 내용입니다.</p>
+    <h2 class="sec rv">자주 묻는 질문</h2>
+    <p class="sec-lead rv">상담 전에 자주 문의하시는 내용입니다.</p>
     <div class="faq">
-      <details>
+      <details class="rv">
         <summary>상담은 어떻게 신청하나요?</summary>
         <div>전화, 이메일 또는 아래 상담 신청서로 문의하시면 확인 후 연락드립니다.</div>
       </details>
-      <details>
+      <details class="rv">
         <summary>상담할 때 무엇을 준비해야 하나요?</summary>
         <div>사업자등록증, 최근 신고 내역, 고지서나 안내문 등 가지고 계신 자료가 있으면 지참해 주세요. 상담 내용에 따라 필요한 서류는 따로 안내해 드립니다.</div>
       </details>
-      <details>
+      <details class="rv">
         <summary>비용은 어떻게 되나요?</summary>
         <div>업무 범위와 규모에 따라 달라지므로 상담 후 안내해 드립니다.</div>
       </details>
-      <details>
+      <details class="rv">
         <summary>방문하지 않고 전화나 이메일로만 상담할 수 있나요?</summary>
         <div>기본 문의는 전화와 이메일로도 가능합니다. 자료 검토가 필요한 경우 방문 또는 자료 전달을 안내해 드립니다.</div>
       </details>
@@ -306,9 +475,9 @@ footer strong{color:#fff}
 <section id="consult" class="consult">
   <div class="wrap consult-grid">
     <div>
-      <h2 class="sec">상담·오시는 길</h2>
-      <p class="sec-lead" style="margin-bottom:8px">편하신 방법으로 문의해 주세요.</p>
-      <dl class="info">
+      <h2 class="sec rv">상담·오시는 길</h2>
+      <p class="sec-lead rv" style="margin-bottom:8px">편하신 방법으로 문의해 주세요.</p>
+      <dl class="info rv rv-l">
         <dt>사무소</dt><dd>세무법인 택스테크 (세무사 최희정)</dd>
         <dt>주소</dt><dd>울산광역시 남구 화합로 120번길 8<br>은산빌딩 402호 (울산산업공구월드 뒤)</dd>
         <dt>전화</dt><dd><a href="tel:0522572680">(052) 257-2680</a></dd>
@@ -316,13 +485,13 @@ footer strong{color:#fff}
         <dt>휴대전화</dt><dd><a href="tel:01065642680">010-6564-2680</a></dd>
         <dt>이메일</dt><dd><a href="mailto:taxchj@naver.com">taxchj@naver.com</a></dd>
       </dl>
-      <div class="maps">
+      <div class="maps rv rv-l">
         <a href="https://map.naver.com/p/search/울산광역시%20남구%20화합로%20120번길%208" target="_blank" rel="noopener">네이버 지도</a>
         <a href="https://map.kakao.com/link/search/울산광역시%20남구%20화합로%20120번길%208" target="_blank" rel="noopener">카카오맵</a>
       </div>
     </div>
 
-    <form id="consultForm">
+    <form id="consultForm" class="rv rv-r">
       <div class="field"><label for="f-name">성함</label><input id="f-name" name="name" autocomplete="name" required></div>
       <div class="field"><label for="f-tel">연락처</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="010-0000-0000" required></div>
       <div class="field">
@@ -366,6 +535,111 @@ document.getElementById("consultForm").addEventListener("submit", function(e){
   window.location.href = "mailto:taxchj@naver.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
 });
 document.getElementById("y").textContent = new Date().getFullYear();
+</script>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  try {
+    // 묶음 안에서 순서대로 시차를 둠 (data-stagger="한 줄에 놓인 개수")
+    document.querySelectorAll('[data-stagger]').forEach(function(box){
+      var n = +box.getAttribute('data-stagger') || 1;
+      Array.prototype.forEach.call(box.children, function(el, i){
+        el.style.setProperty('--d', (i % n) * 110 + 'ms');
+      });
+    });
+
+    // 화면에 들어오면 나타남
+    if (root.classList.contains('anim')) {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      }, { threshold: .15, rootMargin: '0px 0px -6% 0px' });
+      document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+    }
+
+    // 지금 보고 있는 섹션의 메뉴 강조
+    var links = {};
+    document.querySelectorAll('.gnb a').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+    function clearActive(){ Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); }); }
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting && links[e.target.id]) { clearActive(); links[e.target.id].classList.add('active'); }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(links).forEach(function(id){ var el = document.getElementById(id); if (el) spy.observe(el); });
+
+    // 스크롤 진행 바, 헤더 그림자, 맨 위로 버튼, 첫 화면 카드 시차
+    var header = document.querySelector('.site-header'),
+        bar = document.getElementById('progress'),
+        toTop = document.querySelector('.to-top'),
+        card = document.querySelector('.hero .card'),
+        ticking = false;
+    function onScroll(){
+      var y = window.pageYOffset || root.scrollTop;
+      var h = root.scrollHeight - window.innerHeight;
+      bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(y / h, 1) : 0) + ')';
+      header.classList.toggle('scrolled', y > 10);
+      toTop.classList.toggle('show', y > 500);
+      document.body.classList.toggle('scrolled', y > 80);
+      if (y < 300) clearActive();
+      if (card && root.classList.contains('anim')) {
+        card.style.translate = window.innerWidth > 800 ? '0 ' + Math.min(y * 0.07, 50) + 'px' : '';
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', function(){
+      if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
+    onScroll();
+  } catch (err) {
+    root.classList.remove('anim');  // 오류가 나도 내용이 숨겨진 채로 남지 않게 함
+  }
+})();
+</script>
+
+<script>
+// 업무 분야: 카드를 누르면 아래 내용이 부드럽게 바뀜 (방향키 이동 지원)
+(function(){
+  var svc = document.getElementById('svc');
+  if (!svc) return;
+  var tabs = Array.prototype.slice.call(svc.querySelectorAll('[role=tab]'));
+  var panels = Array.prototype.slice.call(svc.querySelectorAll('.svc-panel'));
+  var stage = svc.querySelector('.svc-stage');
+  svc.classList.add('tabs-on');
+  function select(i, focus, scroll){
+    tabs.forEach(function(t, k){
+      var on = k === i;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(function(p, k){ p.classList.toggle('active', k === i); });
+    if (focus) tabs[i].focus();
+    if (scroll && window.innerWidth <= 900) stage.scrollIntoView({ block: 'nearest' });
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ select(i, false, true); });
+    t.addEventListener('keydown', function(e){
+      var n;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') n = 0;
+      else if (e.key === 'End') n = tabs.length - 1;
+      else return;
+      e.preventDefault();
+      select(n, true, false);
+    });
+  });
+  select(0, false, false);
+  // '이 분야로 상담 신청'을 누르면 상담 신청서의 분야가 미리 선택됨
+  svc.querySelectorAll('a[data-type]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var sel = document.getElementById('f-type');
+      if (sel) sel.value = a.getAttribute('data-type');
+    });
+  });
+})();
 </script>
 </body>
 </html>
