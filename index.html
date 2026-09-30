@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>세무사 최주익, 최희정 | 세무법인 택스테크 (울산 남구)</title>
-<meta name="description" content="세무사 최주익, 최희정 | 세무법인 택스테크. 울산 남구에서 기장·세무조정, 부가가치세·종합소득세·법인세 신고, 양도·상속·증여 세무 상담을 도와드립니다.">
+<title>세무사 최희정 | 세무법인 택스테크 (울산 남구)</title>
+<meta name="description" content="세무사 최희정, 세무법인 택스테크. 울산 남구에서 기장·세무조정, 부가가치세·종합소득세·법인세 신고, 양도·상속·증여 세무 상담을 도와드립니다.">
 <meta name="theme-color" content="#0b1f3f">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:site_name" content="세무법인 택스테크">
-<meta property="og:title" content="세무사 최주익, 최희정 | 세무법인 택스테크">
+<meta property="og:title" content="세무사 최희정 | 세무법인 택스테크">
 <meta property="og:description" content="울산 남구 세무 상담. 전화 (052) 257-2680">
 <!-- [수정] 공유 미리보기 이미지(1200x630)를 올린 뒤 실제 배포 주소로 바꾸세요 -->
 <meta property="og:image" content="https://아이디.github.io/저장소이름/assets/share.jpg">
@@ -29,10 +29,6 @@
   "telephone": "+82-52-257-2680",
   "faxNumber": "+82-52-257-2688",
   "email": "taxchj@naver.com",
-  "employee": [
-    {"@type": "Person", "name": "최주익", "jobTitle": "세무사"},
-    {"@type": "Person", "name": "최희정", "jobTitle": "세무사"}
-  ],
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "KR",
@@ -82,8 +78,7 @@ a{color:inherit}
 /* 히어로: 이름이 맨 위 */
 .hero{padding:88px 0 84px;border-bottom:1px solid var(--line)}
 .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:64px;align-items:start}
-.hero h1{font-family:var(--serif);font-size:clamp(2.3rem,6.6vw,4.2rem);line-height:1.2;letter-spacing:.02em;margin:0 0 16px;font-weight:700;color:var(--navy)}
-.hero h1 span{display:block}
+.hero h1{font-family:var(--serif);font-size:clamp(2.7rem,8vw,5rem);line-height:1.1;letter-spacing:.02em;margin:0 0 12px;font-weight:700;color:var(--navy)}
 .firm{font-size:1.15rem;font-weight:700;color:var(--blue);margin:0 0 22px}
 .rule{width:56px;height:3px;background:var(--navy);margin:0 0 26px}
 .lead{font-size:1.1rem;color:var(--muted);max-width:29em;margin:0 0 32px}
@@ -135,22 +130,16 @@ h3{font-size:1.1rem;margin:0 0 6px;color:var(--navy);letter-spacing:-.01em}
 }
 
 /* 소개 */
-.people{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-bottom:56px}
-.person h3{font-family:var(--serif);font-size:1.6rem;letter-spacing:.06em;margin:0 0 14px;color:var(--navy)}
-.person h3 small{font-family:var(--sans);font-size:.92rem;letter-spacing:0;font-weight:600;color:var(--muted);margin-right:10px}
+.about{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start}
 table.profile{width:100%;border-collapse:collapse;border-top:2px solid var(--navy)}
-.profile th,.profile td{padding:15px 4px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.profile th,.profile td{padding:16px 4px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
 .profile th{width:84px;color:var(--muted);font-weight:600;font-size:.92rem}
 .profile td{font-weight:600}
-.principles{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:0 48px;border-top:2px solid var(--navy)}
-.principles li{padding:20px 0}
+.principles{margin:0;padding:0;list-style:none;border-top:2px solid var(--navy)}
+.principles li{padding:18px 0;border-bottom:1px solid var(--line)}
 .principles b{display:block;color:var(--navy);font-size:1.05rem}
 .principles span{color:var(--muted);font-size:.97rem}
-@media(max-width:800px){
-  .people{grid-template-columns:1fr;gap:36px;margin-bottom:40px}
-  .principles{grid-template-columns:1fr;gap:0}
-  .principles li{border-bottom:1px solid var(--line)}
-}
+@media(max-width:800px){.about{grid-template-columns:1fr;gap:36px}}
 
 /* FAQ */
 .faq{border-top:2px solid var(--navy)}
@@ -196,7 +185,7 @@ footer strong{color:#fff}
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="처음으로"><b>세무사 최주익, 최희정</b><span>세무법인 택스테크</span></a>
+    <a class="brand" href="#top" aria-label="처음으로"><b>세무사 최희정</b><span>세무법인 택스테크</span></a>
     <nav class="gnb" aria-label="주요 메뉴">
       <a href="#services">업무 분야</a>
       <a href="#process">진행 방식</a>
@@ -212,7 +201,7 @@ footer strong{color:#fff}
 <div class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <h1><span>세무사 최주익</span><span>세무사 최희정</span></h1>
+      <h1>세무사 최희정</h1>
       <p class="firm">세무법인 택스테크</p>
       <div class="rule" aria-hidden="true"></div>
       <p class="lead">울산 남구에서 개인사업자와 법인의 기장·세무조정, 각종 세금 신고와 세무 상담을 도와드립니다.</p>
@@ -227,7 +216,7 @@ footer strong{color:#fff}
       <h2>상담 안내</h2>
       <dl>
         <div class="row"><dt>전화</dt><dd><a href="tel:0522572680">(052) 257-2680</a></dd></div>
-        <div class="row"><dt>휴대전화</dt><dd><a href="tel:01065642680">010-6564-2680</a> (최희정)</dd></div>
+        <div class="row"><dt>휴대전화</dt><dd><a href="tel:01065642680">010-6564-2680</a></dd></div>
         <div class="row"><dt>이메일</dt><dd><a href="mailto:taxchj@naver.com">taxchj@naver.com</a></dd></div>
         <div class="row"><dt>주소</dt><dd>울산광역시 남구 화합로 120번길 8<br>은산빌딩 402호</dd></div>
       </dl>
@@ -268,28 +257,17 @@ footer strong{color:#fff}
 
 <!-- 소개 -->
 <section id="about" class="soft">
-  <div class="wrap">
-    <h2 class="sec">세무사 소개</h2>
-    <p class="sec-lead">고객의 상황을 먼저 듣고, 필요한 신고와 절차를 알기 쉽게 설명드립니다.</p>
-
-    <!-- [수정] 학력·경력 등 약력은 각 표에 <tr><th scope="row">구분</th><td>내용</td></tr> 형식으로 추가하세요 -->
-    <div class="people">
-      <div class="person">
-        <h3><small>세무사</small>최주익</h3>
-        <table class="profile">
-          <tr><th scope="row">자격</th><td>세무사</td></tr>
-          <tr><th scope="row">소속</th><td>세무법인 택스테크</td></tr>
-        </table>
-      </div>
-      <div class="person">
-        <h3><small>세무사</small>최희정</h3>
-        <table class="profile">
-          <tr><th scope="row">자격</th><td>세무사</td></tr>
-          <tr><th scope="row">소속</th><td>세무법인 택스테크</td></tr>
-        </table>
-      </div>
+  <div class="wrap about">
+    <div>
+      <h2 class="sec">세무사 소개</h2>
+      <p class="sec-lead" style="margin-bottom:28px">고객의 상황을 먼저 듣고, 필요한 신고와 절차를 알기 쉽게 설명드립니다.</p>
+      <!-- [수정] 학력·경력 등 약력은 아래 표에 <tr><th>구분</th><td>내용</td></tr> 형식으로 추가하세요 -->
+      <table class="profile">
+        <tr><th scope="row">성명</th><td>최희정</td></tr>
+        <tr><th scope="row">자격</th><td>세무사</td></tr>
+        <tr><th scope="row">소속</th><td>세무법인 택스테크</td></tr>
+      </table>
     </div>
-
     <ul class="principles">
       <li><b>정확한 신고</b><span>자료를 꼼꼼히 확인해 누락과 오류를 줄입니다.</span></li>
       <li><b>쉬운 설명</b><span>어려운 세무 용어 대신 이해하기 쉬운 말로 안내합니다.</span></li>
@@ -331,11 +309,11 @@ footer strong{color:#fff}
       <h2 class="sec">상담·오시는 길</h2>
       <p class="sec-lead" style="margin-bottom:8px">편하신 방법으로 문의해 주세요.</p>
       <dl class="info">
-        <dt>사무소</dt><dd>세무법인 택스테크 (세무사 최주익, 최희정)</dd>
+        <dt>사무소</dt><dd>세무법인 택스테크 (세무사 최희정)</dd>
         <dt>주소</dt><dd>울산광역시 남구 화합로 120번길 8<br>은산빌딩 402호 (울산산업공구월드 뒤)</dd>
         <dt>전화</dt><dd><a href="tel:0522572680">(052) 257-2680</a></dd>
         <dt>팩스</dt><dd>(052) 257-2688</dd>
-        <dt>휴대전화</dt><dd><a href="tel:01065642680">010-6564-2680</a> (최희정)</dd>
+        <dt>휴대전화</dt><dd><a href="tel:01065642680">010-6564-2680</a></dd>
         <dt>이메일</dt><dd><a href="mailto:taxchj@naver.com">taxchj@naver.com</a></dd>
       </dl>
       <div class="maps">
@@ -369,7 +347,7 @@ footer strong{color:#fff}
 
 <footer>
   <div class="wrap">
-    <strong>세무법인 택스테크</strong> 세무사 최주익, 최희정<br>
+    <strong>세무법인 택스테크</strong> 세무사 최희정<br>
     울산광역시 남구 화합로 120번길 8 은산빌딩 402호 · TEL (052) 257-2680 · FAX (052) 257-2688<br>
     이 사이트의 내용은 일반적인 안내이며, 개별 사안은 상담을 통해 확인해 주세요.<br>
     © <span id="y">2026</span> 세무법인 택스테크
